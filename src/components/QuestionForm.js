@@ -17,9 +17,37 @@ function QuestionForm(props) {
     });
   }
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    console.log(formData);
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    fetch("http://localhost:4000/questions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        prompt: e.target.prompt.value,
+        answers: [
+          e.target.answer1.value,
+          e.target.answer2.value,
+          e.target.answer3.value,
+          e.target.answer4.value,
+        ],
+        correctIndex: parseInt(e.target.correctIndex.value, 10),
+      }),
+    })
+      .then((r) => r.json())
+      .then((data) => setFormData(data));
+
+    setFormData({
+      prompt: "",
+      answer1: "",
+      answer2: "",
+      answer3: "",
+      answer4: "",
+      correctIndex: 0,
+    });
   }
 
   return (
